@@ -57,52 +57,54 @@ def new_item():
     else:
         return template('lokaverknew.tpl')
 
-@route('/edit/<no:int>', method='GET')
+"""@route('/edit/<no:int>', method='GET')
 def edit_item(no):
-    print(no)
 
-    conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='0306923069', passwd='mypassword', db='0306923069_todolist')
-    c = conn.cursor()
-    c.execute("UPDATE todo SET task = '{}', status = '{}' WHERE id LIKE '{}'".format("Visit youtue", 1, no))
-    conn.commit()
-
-    """
     if request.GET.save:
         edit = request.GET.task.strip()
         status = request.GET.status.strip()
-
 
         if status == 'open':
             status = 1
         else:
             status = 0
 
-        conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='0306923069', passwd='mypassword',db='0306923069_todolist')
+            conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='0306923069', passwd='mypassword',db='0306923069_todolist')
         c = conn.cursor()
-        c.execute("UPDATE todo SET task = '{}', status = '{}' WHERE id LIKE '{}'".format(edit, status, no))
+        c.execute("UPDATE todo SET task = ?, status = ? WHERE id LIKE ?", (edit, status, no))
         conn.commit()
 
         return '<p>The item number %s was successfully updated</p>' % no
     else:
         conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='0306923069', passwd='mypassword',db='0306923069_todolist')
         c = conn.cursor()
-        c.execute("SELECT task FROM todo WHERE id LIKE '{}'", (str(no),))
+        c.execute("SELECT task FROM todo WHERE id LIKE ?", (str(no),))
         cur_data = c.fetchone()
-    
         return template('lokaverkedit.tpl', old=cur_data, no=no)
-    """
-    return "virkar!"
+"""
+
+
 @route('/item<item:re:[0-9]+>')
 def show_item(item):
+    print("búmm...")
+    todoid = int(item)
+
+    print(type(todoid))
     conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='0306923069', passwd='mypassword',db='0306923069_todolist')
     c = conn.cursor()
-    c.execute("SELECT task FROM todo WHERE id LIKE ?", (item,))
-    result = c.fetchall()
-    c.close()
-    if not result:
+    c.execute("SELECT * FROM todo WHERE id = {:d}".format(todoid))
+    rec = c.fetchone()
+    print(rec)
+    ttitle = rec[1]
+    tdesc = rec[2]
+    #tdate = convDate = datetime.datetime.strptime(rec[3], "%Y-%m-%d %H:%M:%S.f").strftime(%A %d %B %Y - %I:%M %p)
+    if not rec:
         return 'This item number does not exist!'
+        conn.close()
     else:
-        return 'Task: %s' % result[0]
+        output = template('lokaverkedit.tpl', ttitle=ttitle, tdesc=tdesc,todoid=todoid)
+        return output
+        conn.close()
 
 @error(403)
 def villa(error):

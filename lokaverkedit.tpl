@@ -4,16 +4,18 @@
 	<title></title>
 </head>
 <body>
-	<p>Edit the task with ID = {{no}}</p>
-<form action="/edit/{{no}}" method="get">
-  <input type="text" name="task" value="{{old[0]}}" size="100" maxlength="100">
-  <select name="status">
-    <option>open</option>
-    <option>closed</option>
-  </select>
-  <br>
-  <input type="submit" name="save" value="save">
-</form>
+	<div class="task_title">
+	<p>{{ttitle}}</p>
+</div>
+<div class="task_desc"><p>{{tdesc}}</p></div>
+<button onClick="goBack"></button><button type="button" onClick="location.href'/edit{{todoid}}'">Edit</button>
+<script>
+	fuction goBack() {
+		window.history.back():
+
+	}
+</script>
+
 
 </body>
 </html>

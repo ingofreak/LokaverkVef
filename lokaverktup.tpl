@@ -10,7 +10,7 @@
 %for row in rows:
   <tr>
   %for col in row:
-    <td>{{col}}</td>
+    <td><a href="/item{{row[0]}}">{{col}}</a></td>
   %end
   </tr>
 %end
