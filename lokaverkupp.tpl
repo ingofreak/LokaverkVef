@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 	<title>To Do Listi</title>
 	<link rel="stylesheet" type="text/css" href="/static/style.css"/>
 </head>
@@ -22,11 +23,9 @@
 
 			</ul>
 		</div>
-	<p>Bæta nýju í listann:</p>
-<form action="/new" method="GET">
-  <input type="text" size="100" maxlength="100" name="task">
-  <input type="submit" name="save" value="save">
-</form>
+	<p> Lokaverkefni í VEF</p>
+	Hönnuður: Ingólfur Óskarsson
+	To do listi
 
 
 <div id="footer">
