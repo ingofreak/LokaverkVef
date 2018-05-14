@@ -103,4 +103,4 @@ def villa(error):
 def villa(error):
     return 'Því miður, þetta er ekki til!'
 
-run()
+run(host="0.0.0.0", port=os.environ.get("PORT"))
