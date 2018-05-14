@@ -26,7 +26,13 @@
 	<p> Lokaverkefni í VEF</p>
 	Hönnuður: Ingólfur Óskarsson
 	To do listi
+	Þetta er vefsíða sem höndlar To Do lista. Gott að nota til þess að skipuleggja sig.
 
+	Nota bottlepy,pymysql,github og heroku. Nota pymysql til þess að tengjast gagnagrunninum. Github til þess að geyma kóðann og heroku til þess að keyra kóðann.
+
+	Ingó gerði allt, ég skrifaði skýrslunna.
+
+	Hefði viljað að setja inn dagsetningu á todo hlutinna.
 
 <div id="footer">
 	2018 - <strong>Lokaverkefni</strong>

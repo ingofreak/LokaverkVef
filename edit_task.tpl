@@ -23,7 +23,7 @@
 
 			</ul>
 		</div>
-<p>Edit the task with ID = {{no}}</p>
+<p>Breyta verkefni í</p>
 <form action="/edit/{{no}}" method="get">
   <input type="text" name="task" value="{{old[0]}}" size="100" maxlength="100">
   <select name="status">

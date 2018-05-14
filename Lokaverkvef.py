@@ -4,28 +4,6 @@ from bottle import *
 import pymysql
 import os
 
-#Test
-"""@route('/')
-def index():
-    conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='0306923069', passwd='mypassword',db='0306923069_todolist')
-    cur = conn.cursor()
-    #cur.execute("CREATE TABLE todo (id INTEGER PRIMARY KEY, task char(100) NOT NULL, status bool NOT NULL)")
-    #cur.execute("INSERT INTO todo (task,status) VALUES ('Read A-byte-of-python to get a good introduction into Python',0)")
-    cur.execute("INSERT INTO todo (task,status) VALUES ('Visit the Python website',1)")
-    cur.execute("INSERT INTO todo (task,status) VALUES ('Test various editors for and check the syntax highlighting',1)")
-    cur.execute("INSERT INTO todo (task,status) VALUES ('Choose your favorite WSGI-Framework',0)")
-    conn.commit()
-    return "index"""""
-
-
-#Test
-"""@route('/todo')
-def todo_list():
-    conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='0306923069', passwd='mypassword',db='0306923069_todolist')
-    c = conn.cursor()
-    c.execute("SELECT id, task FROM todo WHERE status LIKE '1'")
-    result = c.fetchall()
-    return str(result)"""
 
 @route('/static/<filename:path>')
 def send_static(filename):
@@ -55,12 +33,11 @@ def new_item():
         c = conn.cursor()
 
         c.execute("INSERT INTO todo (task,status) Values('{}','{:d}')".format(new,1))
-        #new_id = c.lastrowid
 
         conn.commit()
         c.close()
 
-        return '<p>The new task was inserted into the database, the ID is %s</p>'
+        return redirect('/')
     else:
         return template('lokaverknew.tpl')
 
@@ -71,20 +48,29 @@ def edit_item(no):
         edit = request.GET.task.strip()
         status = request.GET.status.strip()
         if status == 'open':
-            status = 1
-        else:
-            status = 0
+            print("open")
+            status = int(1)
             conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='0306923069', passwd='mypassword',db='0306923069_todolist')
-        c = conn.cursor()
-        c.execute("UPDATE todo SET task = ?, status = ? WHERE id  = {:d}".format(edit, status, no))
-        conn.commit()
-        return '<p>The item number %s was successfully updated</p>' % no
+            c = conn.cursor()
+            c.execute("UPDATE todo SET task = '{}', status = '{}' WHERE id  = '{:d}'".format(edit, status, no))
+            conn.commit()
+            conn.close()
+            return redirect('/')
+        else:
+            print("close")
+            status = int(0)
+            conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='0306923069', passwd='mypassword',db='0306923069_todolist')
+            c = conn.cursor()
+            c.execute("UPDATE todo SET task = '{}', status = '{}' WHERE id  = '{:d}'".format(edit, status, no))
+            conn.commit()
+            conn.close()
+            return redirect('/')
     else:
         conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='0306923069', passwd='mypassword',db='0306923069_todolist')
         c = conn.cursor()
         c.execute("SELECT task FROM todo WHERE id  = {:d}".format(no))
         cur_data = c.fetchone()
-
+        print("búmm....")
         return template('edit_task.tpl', old=cur_data, no=no)
 
 
@@ -98,35 +84,15 @@ def show_item(item):
     rec = c.fetchone()
     ttitle = rec[1]
     tdesc = rec[2]
-    #tdate = convDate = datetime.datetime.strptime(rec[3], "%Y-%m-%d %H:%M:%S.f").strftime(%A %d %B %Y - %I:%M %p)
     if not rec:
-        return 'This item number does not exist!'
         conn.close()
+        return 'This item number does not exist!'
+
     else:
         output = template('lokaverkedit.tpl', ttitle=ttitle, tdesc=tdesc,todoid=todoid)
+        conn.close()
         return output
-        conn.close()
 
-""""@route('/edit<no:int>', method=['GET', 'POST'])
-def edit_item(no):
-    todoid = no
-    if request.POST.get('save').strip():
-        todotitle = request.POST.get('task')
-
-        conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='0306923069', passwd='mypassword',db='0306923069_todolist')
-        cur = conn.cursor()
-        cur.execute('UPDATE todo SET task = ?, status = ? WHERE id LIKE ?', (todotitle))
-        conn.commit()
-        rows = cur.execute('SELECT * FROM todo ORDER BY id ASC')
-        return redirect('/',rows = rows)
-        conn.close()
-    else:
-        conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='0306923069', passwd='mypassword',db='0306923069_todolist')
-        cur = conn.cursor()
-        cur.execute('SELECT * FROM todo WHERE id=?', (todoid,))
-        rec = cur.fetchone()
-        return template ('edit_task.tpl', no=no, rec=rec)
-        conn.close"""
 
 
 @error(403)

@@ -24,11 +24,10 @@
 			</ul>
 		</div>
 	<p>Hlutir til að gera:</p>
-<table border="1">
+<table>
 %for row in rows:
   <tr>
-  %for col in row:
-    <td><a href="/item{{row[0]}}">{{col}}</a></td>
+   <td><a href="/item{{row[0]}}">{{row[1]}}</a></td>
   %end
   </tr>
 %end
